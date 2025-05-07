@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bergamotto Verde</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f4f4f4; }
+    header { background: #4CAF50; color: white; padding: 1em 2em; text-align: center; }
+    nav ul { list-style: none; display: flex; justify-content: center; background: #388E3C; margin: 0; padding: 0; }
+    nav ul li { margin: 0 1em; }
+    nav ul li a { color: white; text-decoration: none; padding: 1em; display: block; }
+    nav ul li a:hover { background: #2E7D32; }
+    .hero { padding: 2em; text-align: center; background: #e8f5e9; }
+    .products { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1em; padding: 2em; }
+    .product { background: white; padding: 1em; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    .product img { max-width: 100%; border-radius: 8px; }
+    .product h3 { margin-top: 0.5em; }
+    .product button { margin-top: 0.5em; padding: 0.5em 1em; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    .product button:hover { background: #388E3C; }
+    #cart { background: white; padding: 1em; margin: 2em; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    form { padding: 2em; background: #fff; margin: 2em; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    form label { display: block; margin-top: 1em; }
+    form input, form textarea { width: 100%; padding: 0.5em; margin-top: 0.5em; border: 1px solid #ccc; border-radius: 5px; }
+    form button { margin-top: 1em; padding: 0.75em 1.5em; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    form button:hover { background: #388E3C; }
+    footer { text-align: center; padding: 2em; background: #4CAF50; color: white; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Bergamotto Verde</h1>
+    <p>Specialità al bergamotto direttamente dalla Calabria</p>
+  </header>
+
+  <nav>
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#prodotti">Prodotti</a></li>
+      <li><a href="#chi-siamo">Chi siamo</a></li>
+      <li><a href="#contatti">Contatti</a></li>
+      <li><a href="#cart">Carrello</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <h2>Benvenuti nella nostra azienda agricola</h2>
+    <p>Scopri i nostri prodotti a base di bergamotto, coltivati con passione e rispetto per la natura</p>
+  </section>
+
+  <section id="prodotti" class="products">
+    <div class="product">
+      <img src="https://via.placeholder.com/300x200?text=Bergamotto+Fresco" alt="Bergamotto Fresco">
+      <h3>Bergamotto Fresco</h3>
+      <p>3,70€/kg - Raccolto a mano in Calabria</p>
+      <button onclick="addToCart('Bergamotto Fresco', 3.7)">Aggiungi al carrello</button>
+    </div>
+    <div class="product">
+      <img src="https://via.placeholder.com/300x200?text=Succo+di+Bergamotto" alt="Succo di Bergamotto">
+      <h3>Succo puro di Bergamotto</h3>
+      <p>6€/bottiglia - 100% naturale, senza zuccheri aggiunti</p>
+      <button onclick="addToCart('Succo puro di Bergamotto', 6)">Aggiungi al carrello</button>
+    </div>
+    <div class="product">
+      <img src="https://via.placeholder.com/300x200?text=Marmellata+di+Bergamotto" alt="Marmellata di Bergamotto">
+      <h3>Marmellata di Bergamotto</h3>
+      <p>5€/280g - Dolcezza e aroma unico</p>
+      <button onclick="addToCart('Marmellata di Bergamotto', 5)">Aggiungi al carrello</button>
+    </div>
+  </section>
+
+  <section id="cart">
+    <h2>Carrello</h2>
+    <ul id="cart-items"></ul>
+    <p><strong>Totale: <span id="cart-total">0</span>€</strong></p>
+  </section>
+
+  <section id="ordine">
+    <h2 style="text-align:center">Invia il tuo ordine</h2>
+    <form action="mailto:info@bergamottoverde.it" method="POST" enctype="text/plain">
+      <label for="nome">Nome</label>
+      <input type="text" id="nome" name="nome" required>
+      
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required>
+
+      <label for="indirizzo">Indirizzo di consegna</label>
+      <textarea id="indirizzo" name="indirizzo" required></textarea>
+
+      <label for="messaggio">Ordine dettagliato</label>
+      <textarea id="messaggio" name="messaggio" placeholder="Scrivi qui i prodotti desiderati, quantità, ecc." required></textarea>
+
+      <button type="submit">Invia ordine</button>
+    </form>
+  </section>
+
+  <footer>
+    <p id="contatti">Contattaci: info@bergamottoverde.it | Tel: 333 1234567</p>
+    <p>&copy; 2025 Bergamotto Verde</p>
+  </footer>
+
+  <script>
+    let cart = [];
+
+    function addToCart(product, price) {
+      cart.push({ product, price });
+      renderCart();
+    }
+
+    function renderCart() {
+      const cartItems = document.getElementById('cart-items');
+      const cartTotal = document.getElementById('cart-total');
+      cartItems.innerHTML = '';
+      let total = 0;
+      cart.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = `${item.product} - ${item.price}€`;
+        cartItems.appendChild(li);
+        total += item.price;
+      });
+      cartTotal.textContent = total.toFixed(2);
+    }
+  </script>
+</body>
+</html>
